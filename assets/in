@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -eu
+set -o pipefail
+
+exec 3>&1 # make stdout available as fd 3 for the result
+exec 1>&2 # redirect all output to stderr for logging
+
+. ./lib.sh
+
+dest_dir="$1"
+
+report="$( uscan_report )"
+
+new_version="$( echo "$report" | get_version )"
+new_url="$( echo "$report" | get_url )"
+
+cat <<EOF | tee "${dest_dir}/version" >&3
+{
+  "version" : { "ref" : "$new_version" },
+  "metadata" : [
+    { "name": "version", "value": "$new_version" },
+    { "name": "url",     "value": "$new_url" }
+  ]
+}
+EOF
