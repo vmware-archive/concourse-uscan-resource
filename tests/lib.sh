@@ -19,7 +19,7 @@ run_tests() {
   local expected_version="1.8.3"
 
   [ "$version" = "$expected_version" ] || {
-    echo "report not as expected"
+    echo "version (${version}) not as expected (${expected_version})"
     exit 1
   }
 }
