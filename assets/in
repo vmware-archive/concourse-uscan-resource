@@ -15,12 +15,19 @@ report="$( uscan_report )"
 new_version="$( echo "$report" | get_version )"
 new_url="$( echo "$report" | get_url )"
 
-cat <<EOF | tee "${dest_dir}/version" >&3
-{
-  "version" : { "ref" : "$new_version" },
-  "metadata" : [
-    { "name": "version", "value": "$new_version" },
-    { "name": "url",     "value": "$new_url" }
-  ]
-}
-EOF
+json_tmpl='
+  {
+    "version" : { "ref" : $ver },
+    "metadata" : [
+      { "name": "version", "value": $ver },
+      { "name": "url",     "value": $url }
+    ]
+  }
+'
+
+jq -n \
+  --arg ver "$new_version" \
+  --arg url "$new_url" \
+  "$json_tmpl" \
+  | tee "${dest_dir}/version" \
+  >&3
