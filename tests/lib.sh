@@ -3,9 +3,9 @@
 set -eu
 set -o pipefail
 
-. ./lib.sh
+. "$( dirname "$0" )/../assets/lib.sh"
 
-test_uscan_report() {
+run_tests() {
 	local input='
 {
 	"source": {
@@ -15,12 +15,15 @@ test_uscan_report() {
 }
 '
 
-	local report="$( echo "$input" | uscan_report | get_version )"
-	local expected="1.8.3"
-	[ "$report" = "$expected" ] || {
+	local version="$( echo "$input" | uscan_report | get_version )"
+	local expected_version="1.8.3"
+
+	[ "$version" = "$expected_version" ] || {
 		echo "report not as expected"
 		exit 1
 	}
 }
 
-test_uscan_report
+run_tests && {
+	echo 'all tests passed'
+}
