@@ -12,8 +12,13 @@ report="$( uscan_report )"
 
 new_version="$( echo "$report" | get_version )"
 
-cat <<EOF >&3
-[
-  { "ref" : "$new_version" }
-]
-EOF
+json_tmpl='
+  [
+    { "ref" : $ver }
+  ]
+'
+
+jq -n \
+  --arg ver "$new_version" \
+  "$json_tmpl" \
+  >&3
