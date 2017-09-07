@@ -10,7 +10,11 @@ RUN apt $APT_ARGS update \
     echo 'APT::Install-Suggests "0";' ; \
   } > "$APT_CONF_NOBLOAT" \
   && apt $APT_ARGS full-upgrade \
-  && apt $APT_ARGS install libxml2-utils jq devscripts python3-pip python3-setuptools \
+  && apt $APT_ARGS install \
+    libxml2-utils \
+    jq \
+    devscripts libwww-perl gnupg2 \
+    python3-pip python3-setuptools \
   && pip3 install --no-cache-dir yq \
   && apt $APT_ARGS autoremove \
   && apt $APT_ARGS autoclean \
